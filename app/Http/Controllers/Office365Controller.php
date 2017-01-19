@@ -19,7 +19,7 @@ class Office365Controller extends Controller
         Log::info('Initializing notifications method');
 
         $validationToken = $request->validationtoken;
-        if (!empty($validationToken)) {
+        if (!is_null($validationToken) && !empty($validationToken)) {
             Log::debug('Notifications validation check request', ['validationToken' => $validationToken]);
 
             return response($validationToken, 200)
@@ -28,8 +28,11 @@ class Office365Controller extends Controller
         else
         {
             $response = $request->input('value')[0];
-            $resource = $response->Resource;
-            $splitResource = explode('Messages', $resource);
+            if (is_null($response)) 
+            {
+                $resource = $response->Resource;
+                $splitResource = explode('Messages', $resource);
+            }
         }
 
         return $request->input();
